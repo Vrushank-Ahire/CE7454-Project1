@@ -1,0 +1,45 @@
+% Dataset-generation figure: 12 supplied training samples + observed/inferred pipeline.
+% Build: pdflatex dataset.tex (needs thumbs/*.jpg). Designed at \columnwidth = 8.26 cm.
+\documentclass[tikz,border=1pt]{standalone}
+\usepackage{mathptmx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\definecolor{ink}{HTML}{1A1A1A}\definecolor{ink2}{HTML}{5A5955}
+\definecolor{obsE}{HTML}{2A78D6}\definecolor{obsF}{HTML}{E3EEFB}
+\definecolor{infE}{HTML}{8A8984}
+\definecolor{c0}{HTML}{2A78D6}\definecolor{c1}{HTML}{D2581F}\definecolor{c2}{HTML}{15936A}
+\tikzset{>={Stealth[length=3.6pt,width=3pt]},
+  every node/.style={font=\fontsize{6}{7}\selectfont, text=ink, align=center},
+  obs/.style={draw=obsE, fill=obsF, line width=0.6pt, rounded corners=2pt, inner sep=2pt, text width=1.62cm, minimum height=0.78cm},
+  inf/.style={draw=infE, fill=white, dashed, line width=0.6pt, rounded corners=2pt, inner sep=2pt, text width=1.62cm, minimum height=0.78cm},
+  fl/.style={->, line width=0.6pt, draw=ink2}}
+\newcommand{\thumb}[1]{\includegraphics[width=1.30cm]{thumbs/#1_train.jpg}}
+\begin{document}
+\begin{tikzpicture}
+  \def\d{1.35}\def\g{0.22}
+  % thumbnails: two triplets per row
+  \foreach \sc/\r/\k in {dog1/0/0, dog2/0/1, flower1/1/0, flower2/1/1}{
+    \foreach \c in {0,1,2}{
+      \node[inner sep=0pt, draw=ink2, line width=0.3pt] at ({\k*(3*\d+\g)+\c*\d}, {-\r*\d}) {\thumb{\c_\sc}};
+    }
+  }
+  \foreach \k in {0,1}{
+    \node[text=c0, font=\fontsize{6}{7}\selectfont\bfseries] at ({\k*(3*\d+\g)+0*\d}, 0.8) {Real (0)};
+    \node[text=c1, font=\fontsize{6}{7}\selectfont\bfseries] at ({\k*(3*\d+\g)+1*\d}, 0.8) {Model A (1)};
+    \node[text=c2, font=\fontsize{6}{7}\selectfont\bfseries] at ({\k*(3*\d+\g)+2*\d}, 0.8) {Model B (2)};
+  }
+  % pipeline
+  \def\py{-2.55}
+  \node[obs] (p0) at (0.15,\py) {\textbf{Real photo}\\label-0 files};
+  \node[inf] (p1) at (2.25,\py) {\textbf{Scene description / prompt}};
+  \node[inf] (p2) at (4.35,\py) {\textbf{Generators A, B}\\text-to-image};
+  \node[obs] (p3) at (6.45,\py) {\textbf{Common format}\\$512{\times}512$\\JPEG q95, 4:2:0};
+  \draw[fl] (p0) -- (p1); \draw[fl] (p1) -- (p2); \draw[fl] (p2) -- (p3);
+  \draw[fl, dashed] (p0.south) -- ++(0,-0.22) -| node[pos=0.25, below=-1pt, text=ink2] {resize / re-encode (inferred)} (p3.south);
+  % legend
+  \node[obs, text width=0.25cm, minimum height=0.22cm, inner sep=0pt] (lo) at (0.9,-3.72) {};
+  \node[anchor=west, text=ink2] at (lo.east) {observed in the 12 files};
+  \node[inf, text width=0.25cm, minimum height=0.22cm, inner sep=0pt] (li) at (3.9,-3.72) {};
+  \node[anchor=west, text=ink2] at (li.east) {inferred, not verified};
+\end{tikzpicture}
+\end{document}

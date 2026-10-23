@@ -1,0 +1,1 @@
+`aigi_forensic_train.py` is an earlier, larger multi-branch variant (RGB + NPR + SRM/Bayar + spectral branches, about 8.5M parameters). It was **not** used for the submitted predictions, and the report gives no results for it. It is kept only as development history.

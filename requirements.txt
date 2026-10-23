@@ -1,0 +1,6 @@
+# versions used for the submitted run (see data/aigi_jpeg.o25851016)
+torch==2.6.0
+numpy==2.2.4
+pillow==11.1.0
+# report figures only
+matplotlib>=3.8
